@@ -132,13 +132,13 @@ public class CustomerController {
         if (customer.getId() == null) { // crear
             customerService.saveACustomer(customer);
         } else { // editar
-            customerService.findACustomerById(customer.getId()).
-                ifPresentOrElse(optCustomer -> {
+            customerService.findACustomerById(customer.getId()).ifPresentOrElse(
+                optCustomer -> {
                     BeanUtils.copyProperties(customer, optCustomer);
                     customerService.saveACustomer(optCustomer);
-                }, () -> {
-                    model.addAttribute("message", clientIdMsg);
-                });
+                },
+                () -> model.addAttribute("message", clientIdMsg)
+            );
         }
         if (model.containsAttribute("message")) return "/error";
         return "redirect:/customers/" + customer.getId();
