@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body class="wysiwyg">
+
+<header>
+    <h1>Detalle de cliente</h1>
+</header>
+
+<nav>
+    <button onclick="location.href='/customers'">
+        👥&nbsp;&nbsp;Listar todos los clientes
+    </button>
+</nav>
+
+<main>
+    <p th:if="${customer == null}">No hay clientes.</p>
+    <table th:if="${customer}" id="customer">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Edad</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="|👤 ${customer.id}"></td>
+            <td th:text="${customer.nombre}"></td>
+            <td th:text="${customer.apellido}"></td>
+            <td>
+                <a th:href="'mailto://' + ${customer.email}"
+                   th:text="|✉️ ${customer.email}"></a>
+            </td>
+            <td th:text="${customer.edad}"></td>
+            <td>
+                <a th:href="'/customers/update/' + ${customer.id}">
+                    👁️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                <a th:href="'/customers/delete/' + ${customer.id}">
+                    🗑️&nbsp;&nbsp;Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

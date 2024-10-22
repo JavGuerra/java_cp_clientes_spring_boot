@@ -1,0 +1,52 @@
+body {
+    margin: 1em auto;
+    padding: 1em;
+    text-align: center;
+}
+
+header, nav {
+    margin-bottom: 1em;
+}
+
+footer {
+    margin-top: 1.5em;
+    line-height: normal;
+}
+
+button {
+    padding: 0.5em 1em;
+}
+
+#menu button {
+    width: 20em;
+    max-width: 100%;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+form, fieldset {
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: 1em;
+}
+
+table, form {
+    margin: auto;
+    margin-bottom: 0 !important;
+}
+
+table {
+    width: max-content !important;
+}
+
+label {
+    width: 5em;
+    display: inline-block;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    body {
+        max-width: 50em;
+    }
+}

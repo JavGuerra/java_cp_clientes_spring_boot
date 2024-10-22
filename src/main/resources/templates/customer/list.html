@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Listado</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body class="wysiwyg">
+
+<header>
+    <h1>Clientes</h1>
+</header>
+
+<nav>
+    <button onclick="location.href='/customers/new'">
+        👤&nbsp;&nbsp;Crear un cliente nuevo
+    </button> &nbsp;&nbsp;
+    <button th:if="${customers.size() > 0}" onclick="location.href='/customers/delete'">
+        🗑️&nbsp;&nbsp;Eliminar todos los clientes
+    </button>
+</nav>
+
+<main>
+    <p th:if="${customers == null || customers.size() == 0}">No hay clientes.</p>
+    <table th:unless="${customers == null || customers.size() == 0}" id="customersList">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customers}">
+            <td th:text="${customer.nombre}"></td>
+            <td th:text="${customer.apellido}"></td>
+            <td>
+                <a th:href="'/customers/' + ${customer.id}">
+                    👁️&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
+                <a th:href="'/customers/update/' + ${customer.id}">
+                    ✏️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                <a th:href="'/customers/delete/' + ${customer.id}">
+                    🗑️&nbsp;&nbsp;Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${customers != null && customers.size() > 0}"
+       th:text="'Total de clientes: ' + ${customers.size()}"></p>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

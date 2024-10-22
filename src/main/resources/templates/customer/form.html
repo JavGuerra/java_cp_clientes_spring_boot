@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulario</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body class="wysiwyg">
+
+<header>
+    <h1 th:if="${customer.id}">Editar cliente <span th:text="${customer.id}"></span></h1>
+    <h1 th:unless="${customer.id}">Crear un nuevo cliente</h1>
+</header>
+
+<main>
+    <p th:if="${customer == null}">No se encuentra el cliente.</p>
+    <form th:if="${customer}"  id="customerForm" th:action="@{/customers}" th:object="${customer}" method="post">
+        <fieldset>
+            <legend>Datos del cliente</legend>
+            <input type="hidden" id="id" th:field="*{id}" />
+            <div>
+                <label for="name">Nombre</label>
+                <input type="text" id="name" th:field="*{nombre}" />
+            </div>
+            <div>
+                <label for="surname">Apellido</label>
+                <input type="text" id="surname" th:field="*{apellido}" />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" />
+            </div>
+            <div>
+                <label for="age">Edad</label>
+                <input type="number" id="age" th:field="*{edad}" />
+            </div>
+        </fieldset>
+        <button type="button" onclick="location.href='/customers'">
+            ❌&nbsp;&nbsp;Cancelar</button> &nbsp;&nbsp;
+        <button type="submit">💾&nbsp;&nbsp;Guardar</button>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

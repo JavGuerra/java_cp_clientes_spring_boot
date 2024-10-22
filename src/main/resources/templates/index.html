@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer CRUD</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body class="wysiwyg">
+
+    <header>
+        <h1>Menú</h1>
+    </header>
+
+    <main>
+        <p>Bienvenido a la aplicación de clientes.</p>
+    </main>
+
+    <nav id="menu">
+        <button type="button" onclick="location.href='/customers'">
+            👥&nbsp;&nbsp;Listar todos los clientes</button><br />
+        <button type="button" onclick="location.href='/customers/new'">
+            👤&nbsp;&nbsp;Crear un cliente nuevo</button><br />
+        <button type="button" onclick="location.href='/customers/delete'">
+            🗑️&nbsp;&nbsp;Eliminar todos los clientes</button>
+    </nav>
+
+    <th:block th:replace="~{fragment/footer :: footer}"></th:block>
+
+</body>
+</html>
