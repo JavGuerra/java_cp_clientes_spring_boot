@@ -20,9 +20,10 @@ public class CustomerController {
 
     private CustomerService customerService;
 
-    private final String idMsg =
-            "Falta el id o no es un número entero positivo.";
-    private final String clientIdMsg = "El cliente no existe.";
+    private final String idMsg = "Falta el id o no es un entero positivo";
+    private final String clientIdMsg = "El cliente no existe";
+    private final String dataMsg = "Los datos recibidos no son válidos";
+    private final String errMsg = "Error al borrar todos los clientes";
 
     /**
      * Lista todos los clientes
@@ -32,8 +33,7 @@ public class CustomerController {
      */
     @GetMapping("customers")
     public String findAll(Model model) {
-        model.addAttribute("customers",
-                customerService.getAllCustomers());
+        model.addAttribute("customers", customerService.getAllCustomers());
         return "/customer/list";
     }
 
@@ -101,31 +101,12 @@ public class CustomerController {
     @PostMapping("customers")
     public String save(@ModelAttribute Customer customer, Model model) {
         if (customer == null) {
-            model.addAttribute("message",
-                    "Los datos recibidos no son válidos.");
+            model.addAttribute("message", dataMsg);
             return "/error";
         }
-
-        if (stringIsEmpty(customer.getNombre())) {
-            model.addAttribute("message", "Falta el nombre.");
-            return "/error";
-        }
-        if (stringIsEmpty(customer.getApellido())) {
-            model.addAttribute("message", "Faltan los apellidos.");
-            return "/error";
-        }
-        if (stringIsEmpty(customer.getEmail())) {
-            model.addAttribute("message", "Falta el email.");
-            return "/error";
-        }
-        if (invalidIntPosNumber((long) customer.getEdad())) {
-            model.addAttribute("message",
-                    "Falta la edad o no es un número entero positivo.");
-            return "/error";
-        }
-        if (customer.getEdad() <= 0) {
-            model.addAttribute("message",
-                    "La edad debe ser mayor que cero.");
+        String message = formValidation(customer);
+        if (message != null) {
+            model.addAttribute("message", message);
             return "/error";
         }
 
@@ -175,8 +156,7 @@ public class CustomerController {
     public String deleteAll(Model model) {
         customerService.removeAllCustomers();
         if (customerService.countCustomers() != 0) {
-            model.addAttribute("message",
-                    "Error al borrar todos los clientes.");
+            model.addAttribute("message", errMsg);
             return "/error";
         }
         return "redirect:/customers";
