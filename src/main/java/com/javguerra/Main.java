@@ -36,28 +36,28 @@ public class Main {
             List<Customer> customers = new ArrayList<>();
 
             customers.add(
-                    Customer.builder().
-                            nombre("c1").
-                            apellido("garcia").
-                            email("c1@gmail.com").
-                            edad(30).
-                            build()
+                Customer.builder().
+                        nombre("c1").
+                        apellido("garcia").
+                        email("c1@gmail.com").
+                        edad(30).
+                        build()
             );
             customers.add(
-                    Customer.builder().
-                            nombre("c2").
-                            apellido("perez").
-                            email("c2@gmail.com").
-                            edad(40).
-                            build()
+                Customer.builder().
+                        nombre("c2").
+                        apellido("perez").
+                        email("c2@gmail.com").
+                        edad(40).
+                        build()
             );
             customers.add(
-                    Customer.builder().
-                            nombre("c3").
-                            apellido("melgar").
-                            email("c3@gmail.com").
-                            edad(50).
-                            build()
+                Customer.builder().
+                        nombre("c3").
+                        apellido("melgar").
+                        email("c3@gmail.com").
+                        edad(50).
+                        build()
             );
 
             customerRepository.saveAll(customers);
