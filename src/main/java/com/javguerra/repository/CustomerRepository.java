@@ -1,6 +1,6 @@
-package com.javguerra.repositories;
+package com.javguerra.repository;
 
-import com.javguerra.entities.Customer;
+import com.javguerra.model.Customer;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;

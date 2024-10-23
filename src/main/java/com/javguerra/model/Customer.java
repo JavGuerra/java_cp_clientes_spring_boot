@@ -1,4 +1,4 @@
-package com.javguerra.entities;
+package com.javguerra.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,7 @@
-package com.javguerra.controllers;
+package com.javguerra.controller;
 
-import com.javguerra.entities.Customer;
-import com.javguerra.services.CustomerService;
+import com.javguerra.model.Customer;
+import com.javguerra.service.CustomerService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import static com.javguerra.utils.Validation.*;
+import static com.javguerra.util.Validation.*;
 
 @Controller
 @AllArgsConstructor

@@ -1,7 +1,7 @@
-package com.javguerra.controllers;
+package com.javguerra.controller;
 
-import com.javguerra.entities.Customer;
-import com.javguerra.services.CustomerService;
+import com.javguerra.model.Customer;
+import com.javguerra.service.CustomerService;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

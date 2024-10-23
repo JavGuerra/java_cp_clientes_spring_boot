@@ -1,6 +1,6 @@
-package com.javguerra.services;
+package com.javguerra.service;
 
-import com.javguerra.entities.Customer;
+import com.javguerra.model.Customer;
 
 import java.util.List;
 import java.util.Optional;

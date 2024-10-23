@@ -1,6 +1,6 @@
 com.javguerra
-com.javguerra.controllers
-com.javguerra.entities
-com.javguerra.repositories
-com.javguerra.services
-com.javguerra.utils
+com.javguerra.controller
+com.javguerra.model
+com.javguerra.repository
+com.javguerra.service
+com.javguerra.util

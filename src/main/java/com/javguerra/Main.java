@@ -1,7 +1,7 @@
 package com.javguerra;
 
-import com.javguerra.entities.Customer;
-import com.javguerra.repositories.CustomerRepository;
+import com.javguerra.model.Customer;
+import com.javguerra.repository.CustomerRepository;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

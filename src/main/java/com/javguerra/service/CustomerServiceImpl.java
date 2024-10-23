@@ -1,7 +1,7 @@
-package com.javguerra.services;
+package com.javguerra.service;
 
-import com.javguerra.entities.Customer;
-import com.javguerra.repositories.CustomerRepository;
+import com.javguerra.model.Customer;
+import com.javguerra.repository.CustomerRepository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

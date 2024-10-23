@@ -1,6 +1,6 @@
-package com.javguerra.utils;
+package com.javguerra.util;
 
-import com.javguerra.entities.Customer;
+import com.javguerra.model.Customer;
 
 import lombok.experimental.UtilityClass;
 
