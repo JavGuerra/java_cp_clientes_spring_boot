@@ -51,8 +51,8 @@ public class CustomerController {
             return "/error";
         }
         customerService.findACustomerById(id).ifPresentOrElse(
-                customer -> model.addAttribute("customer", customer),
-                () -> model.addAttribute("message", clientIdMsg)
+            customer -> model.addAttribute("customer", customer),
+            () -> model.addAttribute("message", clientIdMsg)
         );
         if (model.containsAttribute("message")) return "/error";
         return "/customer/detail";
@@ -84,8 +84,8 @@ public class CustomerController {
             return "/error";
         }
         customerService.findACustomerById(id).ifPresentOrElse(
-                customer -> model.addAttribute("customer", customer),
-                () -> model.addAttribute("message", clientIdMsg)
+            customer -> model.addAttribute("customer", customer),
+            () -> model.addAttribute("message", clientIdMsg)
         );
         if (model.containsAttribute("message")) return "/error";
         return "/customer/form";
@@ -139,8 +139,8 @@ public class CustomerController {
             return "/error";
         }
         customerService.findACustomerById(id).ifPresentOrElse(
-                customer -> customerService.removeACustomerById(customer.getId()),
-                () -> model.addAttribute("message", clientIdMsg)
+            customer -> customerService.removeACustomerById(customer.getId()),
+            () -> model.addAttribute("message", clientIdMsg)
         );
         if (model.containsAttribute("message")) return "/error";
         return "redirect:/customers";
