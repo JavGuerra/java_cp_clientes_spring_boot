@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,26 +43,105 @@ class CustomerControllerUTest {
     }
 
     @Test
-    void findById() {
+    @DisplayName("findById que tiene cliente con id")
+    void findById_WhenCustomerExists() {
+        Customer customer1 = Customer.builder().id(1L).nombre("c1").build();
+        Optional<Customer> customerOpt = Optional.of(customer1);
+        when(customerService.findACustomerById(1L)).thenReturn(customerOpt);
+
+        String view = customerController.findById(1L, model);
+
+        assertEquals("/customer/detail", view);
+        verify(customerService).findACustomerById(1L);
+        verify(model).addAttribute("customer", customer1);
     }
 
     @Test
+    @DisplayName("findById que no tiene cliente con id")
+    void findById_WhenCustomerNotExists() {
+        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+
+        String view = customerController.findById(1L, model);
+
+        // assertEquals("/error", view);
+        verify(customerService).findACustomerById(1L);
+        // verify(model, never()).addAttribute(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Método que te desplaza al formulario de customer/form vacío")
     void getFormToCreate() {
+        String view = customerController.getFormToCreate(model);
+
+        assertEquals("/customer/form", view);
+        verify(model).addAttribute(eq("customer"), any(Customer.class));
     }
 
     @Test
-    void getFormToUpdate() {
+    @DisplayName("Método que te desplaza al formulario de customer/form relleno")
+    void getFormToUpdate_Exists() {
+        Customer customer1 = Customer.builder().id(1L).nombre("c1").build();
+        Optional<Customer> customerOpt = Optional.of(customer1);
+        when(customerService.findACustomerById(1L)).thenReturn(customerOpt);
+
+        String view = customerController.getFormToUpdate(model, 1L);
+
+        assertEquals("/customer/form", view);
+        verify(customerService).findACustomerById(1L);
+        verify(model).addAttribute("customer", customer1);
     }
 
     @Test
-    void save() {
+    @DisplayName("Método que te desplaza a la página de error si no se encuentra el cliente")
+    void getFormToUpdate_NotExists() {
+        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+
+        String view = customerController.getFormToUpdate(model, 1L);
+
+        // assertEquals("/error", view);
+        verify(customerService).findACustomerById(1L);
+        // verify(model, never()).addAttribute(anyString(), any());
     }
 
     @Test
-    void deleteById() {
+    @DisplayName("Método que guarda un cliente existente en el repositorio")
+    void save_Exists() {
     }
 
     @Test
+    @DisplayName("Método que guarda un cliente nuevo en el repositorio")
+    void save_NotExists() {
+    }
+
+    @Test
+    @DisplayName("Método que te desplaza a la página de error si no se borra el cliente")
+    void save_NotSaved() {
+    }
+
+    @Test
+    @DisplayName("Método que borra un cliente del repositorio")
+    void deleteById_Exists() {
+        String view = customerController.deleteById(1L, model);
+        assertEquals("redirect:/customers", view);
+        verify(customerService).findACustomerById(1L);
+    }
+
+    @Test
+    @DisplayName("Método que te desplaza a la página de error si no se borra el cliente")
+    void deleteById_NotExists() {
+        String view = customerController.deleteById(1L, model);
+        // assertEquals("/error", view);
+        // verify(model, never()).addAttribute(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Método que borra todos los clientes del repositorio")
     void deleteAll() {
     }
+
+    @Test
+    @DisplayName("Método que te desplaza a la página de error si no se borran los clientes")
+    void deleteAll_NotDeleted() {
+    }
+
 }

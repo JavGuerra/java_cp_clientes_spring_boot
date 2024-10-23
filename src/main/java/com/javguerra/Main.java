@@ -38,7 +38,7 @@ public class Main {
             customers.add(
                 Customer.builder().
                         nombre("c1").
-                        apellido("garcia").
+                        apellido("García").
                         email("c1@gmail.com").
                         edad(30).
                         build()
@@ -46,7 +46,7 @@ public class Main {
             customers.add(
                 Customer.builder().
                         nombre("c2").
-                        apellido("perez").
+                        apellido("Pérez").
                         email("c2@gmail.com").
                         edad(40).
                         build()
@@ -54,7 +54,7 @@ public class Main {
             customers.add(
                 Customer.builder().
                         nombre("c3").
-                        apellido("melgar").
+                        apellido("Melgar").
                         email("c3@gmail.com").
                         edad(50).
                         build()
