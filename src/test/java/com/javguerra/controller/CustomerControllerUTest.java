@@ -49,7 +49,7 @@ class CustomerControllerUTest {
         Optional<Customer> customerOpt = Optional.of(customer1);
         when(customerService.findACustomerById(1L)).thenReturn(customerOpt);
 
-        String view = customerController.findById(1L, model);
+        String view = customerController.findById(model, 1L);
 
         assertEquals("/customer/detail", view);
         verify(customerService).findACustomerById(1L);
@@ -61,11 +61,10 @@ class CustomerControllerUTest {
     void findById_WhenCustomerNotExists() {
         when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
 
-        String view = customerController.findById(1L, model);
+        String view = customerController.findById(model, 1L);
 
-        // assertEquals("/error", view);
+        //assertEquals("/error", view); // TODO
         verify(customerService).findACustomerById(1L);
-        // verify(model, never()).addAttribute(anyString(), any());
     }
 
     @Test
@@ -98,50 +97,86 @@ class CustomerControllerUTest {
 
         String view = customerController.getFormToUpdate(model, 1L);
 
-        // assertEquals("/error", view);
+        // assertEquals("/error", view); // TODO
         verify(customerService).findACustomerById(1L);
-        // verify(model, never()).addAttribute(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Método que guarda un cliente nuevo en el repositorio")
+    void save_New() {
+        Customer customer1 = Customer.builder().
+                nombre("c1").apellido("a1").email("e1").edad(1).build();
+
+        // Simula el guardado del cliente en el repositorio y añade el id
+        doAnswer(invocation -> {
+            Customer customerToSave = invocation.getArgument(0);
+            customerToSave.setId(1L);
+            return null;
+        }).when(customerService).saveACustomer(customer1);
+
+        String view = customerController.save(model, customer1);
+        assertEquals("redirect:/customers/1", view);
     }
 
     @Test
     @DisplayName("Método que guarda un cliente existente en el repositorio")
     void save_Exists() {
+        Customer customer1 = Customer.builder().id(1L).
+                nombre("c1").apellido("a1").email("e1").edad(1).build();
+
+        String view = customerController.save(model, customer1);
+
+        assertEquals("redirect:/customers/1", view);
     }
 
     @Test
-    @DisplayName("Método que guarda un cliente nuevo en el repositorio")
-    void save_NotExists() {
-    }
+    @DisplayName("Método que te desplaza a la página de error si no existe el cliente")
+    void save_NotExist() {
+        Customer customer1 = Customer.builder().id(1L).
+                nombre("c1").apellido("a1").email("e1").edad(1).build();
+        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
 
-    @Test
-    @DisplayName("Método que te desplaza a la página de error si no se borra el cliente")
-    void save_NotSaved() {
+        String view = customerController.save(model, customer1);
+
+        //assertEquals("/error", view); // TODO
     }
 
     @Test
     @DisplayName("Método que borra un cliente del repositorio")
     void deleteById_Exists() {
-        String view = customerController.deleteById(1L, model);
+        Customer customer1 = Customer.builder().id(1L).build();
+        when(customerService.findACustomerById(1L)).
+                thenReturn(Optional.of(customer1));
+
+        String view = customerController.deleteById(model, 1L);
         assertEquals("redirect:/customers", view);
-        verify(customerService).findACustomerById(1L);
+        verify(customerService).removeACustomerById(1L);
     }
 
     @Test
     @DisplayName("Método que te desplaza a la página de error si no se borra el cliente")
     void deleteById_NotExists() {
-        String view = customerController.deleteById(1L, model);
-        // assertEquals("/error", view);
-        // verify(model, never()).addAttribute(anyString(), any());
+        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+
+        String view = customerController.deleteById(model, 1L);
+        //assertEquals("/error", view); // TODO
     }
 
     @Test
     @DisplayName("Método que borra todos los clientes del repositorio")
     void deleteAll() {
+        String view = customerController.deleteAll(model);
+        assertEquals("redirect:/customers", view);
+        verify(customerService).removeAllCustomers();
     }
 
     @Test
     @DisplayName("Método que te desplaza a la página de error si no se borran los clientes")
     void deleteAll_NotDeleted() {
+        when(customerService.countCustomers()).thenReturn(1L);
+        String view = customerController.deleteAll(model);
+        assertEquals("/error", view);
+        verify(customerService).removeAllCustomers();
     }
 
 }

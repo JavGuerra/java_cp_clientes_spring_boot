@@ -45,7 +45,7 @@ public class CustomerController {
      * @return String
      */
     @GetMapping("customers/{id}")
-    public String findById(@PathVariable Long id, Model model) {
+    public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0) {
             model.addAttribute("message", idMsg);
             return "/error";
@@ -99,7 +99,7 @@ public class CustomerController {
      * @return String
      */
     @PostMapping("customers")
-    public String save(@ModelAttribute Customer customer, Model model) {
+    public String save(Model model, @ModelAttribute Customer customer) {
         if (customer == null) {
             model.addAttribute("message", dataMsg);
             return "/error";
@@ -133,7 +133,7 @@ public class CustomerController {
      * @return String
      */
     @GetMapping("customers/delete/{id}")
-    public String deleteById(@PathVariable Long id, Model model) {
+    public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0) {
             model.addAttribute("message", idMsg);
             return "/error";
