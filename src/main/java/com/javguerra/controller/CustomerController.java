@@ -50,12 +50,23 @@ public class CustomerController {
             model.addAttribute("message", idMsg);
             return "/error";
         }
-        customerService.findACustomerById(id).ifPresentOrElse(
-            customer -> model.addAttribute("customer", customer),
-            () -> model.addAttribute("message", clientIdMsg)
-        );
-        if (model.containsAttribute("message")) return "/error";
-        return "/customer/detail";
+
+        return customerService.findACustomerById(id).map(customer -> {
+            model.addAttribute("customer", customer);
+            return "/customer/detail";
+        }).orElseGet(() -> {
+            model.addAttribute("message", clientIdMsg);
+            return "/error";
+        });
+
+// Deprecado
+//        if (invalidIntPosNumber(id) || id == 0) {
+//        customerService.findACustomerById(id).ifPresentOrElse(
+//                customer -> model.addAttribute("customer", customer),
+//                () -> model.addAttribute("message", clientIdMsg)
+//        );
+//        if (model.containsAttribute("message")) return "/error";
+//        return "/customer/detail";
     }
 
     /**
@@ -83,12 +94,13 @@ public class CustomerController {
             model.addAttribute("message", idMsg);
             return "/error";
         }
-        customerService.findACustomerById(id).ifPresentOrElse(
-            customer -> model.addAttribute("customer", customer),
-            () -> model.addAttribute("message", clientIdMsg)
-        );
-        if (model.containsAttribute("message")) return "/error";
-        return "/customer/form";
+        return customerService.findACustomerById(id).map(customer -> {
+            model.addAttribute("customer", customer);
+            return "/customer/form";
+        }).orElseGet(() -> {
+            model.addAttribute("message", clientIdMsg);
+            return "/error";
+        });
     }
 
     /**
@@ -110,19 +122,34 @@ public class CustomerController {
             return "/error";
         }
 
+//        if (customer.getId() == null) { // crear
+//            customerService.saveACustomer(customer);
+//        } else { // editar
+//            customerService.findACustomerById(customer.getId()).ifPresentOrElse(
+//                optCustomer -> {
+//                    BeanUtils.copyProperties(customer, optCustomer);
+//                    customerService.saveACustomer(optCustomer);
+//                },
+//                () -> model.addAttribute("message", clientIdMsg)
+//            );
+//        }
+
         if (customer.getId() == null) { // crear
             customerService.saveACustomer(customer);
+            return "redirect:/customers/" + customer.getId();
         } else { // editar
-            customerService.findACustomerById(customer.getId()).ifPresentOrElse(
-                optCustomer -> {
-                    BeanUtils.copyProperties(customer, optCustomer);
-                    customerService.saveACustomer(optCustomer);
-                },
-                () -> model.addAttribute("message", clientIdMsg)
-            );
+            return customerService.findACustomerById(customer.getId()).map(optCustomer -> {
+                BeanUtils.copyProperties(customer, optCustomer);
+                customerService.saveACustomer(optCustomer);
+                return "redirect:/customers/" + customer.getId();
+            }).orElseGet(() -> {
+                model.addAttribute("message", clientIdMsg);
+                return "/error";
+            });
         }
-        if (model.containsAttribute("message")) return "/error";
-        return "redirect:/customers/" + customer.getId();
+
+
+
     }
 
     /**
@@ -138,12 +165,13 @@ public class CustomerController {
             model.addAttribute("message", idMsg);
             return "/error";
         }
-        customerService.findACustomerById(id).ifPresentOrElse(
-            customer -> customerService.removeACustomerById(customer.getId()),
-            () -> model.addAttribute("message", clientIdMsg)
-        );
-        if (model.containsAttribute("message")) return "/error";
-        return "redirect:/customers";
+        return customerService.findACustomerById(id).map(customer -> {
+            customerService.removeACustomerById(customer.getId());
+            return "redirect:/customers";
+        }).orElseGet(() -> {
+            model.addAttribute("message", clientIdMsg);
+            return "/error";
+        });
     }
 
     /**
