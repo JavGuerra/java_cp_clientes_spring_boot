@@ -4,23 +4,46 @@ import com.javguerra.model.Customer;
 import com.javguerra.service.CustomerService;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
-@ExtendWith(MockitoExtension.class)
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
 class CustomerControllerITest {
 
-    @InjectMocks
-    private CustomerController customerController;
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private CustomerService customerService;
-    @Mock
-    private Customer customer;
 
     @Test
-    void findAll() {
+    void findAll() throws Exception {
+        when(customerService.getAllCustomers()).thenReturn(List.of(
+                Customer.builder().id(1L).nombre("c1").build(),
+                Customer.builder().id(2L).nombre("c2").build()
+        ));
+
+        mockMvc.perform(get("/customers"))
+                .andExpect(view().name("customer/list"))
+                .andExpect(model().attributeExists("customers"))
+                .andExpect(model().attribute("customers", hasSize(2)))
+                .andExpect(model().attribute("customers", hasItem(
+                        allOf(
+                                hasProperty("id", is(1L)),
+                                hasProperty("nombre", is("c1"))
+                        )
+                )));
     }
 
     @Test

@@ -17,8 +17,8 @@
 </nav>
 
 <main>
-    <p th:if="${customer == null}">No hay clientes.</p>
-    <table th:if="${customer}" id="customer">
+    <p th:if="${customer == null}">No se encuentra el cliente</p>
+    <table th:if="${customer}" id="customerDetail">
         <thead>
         <tr>
             <th>Id</th>

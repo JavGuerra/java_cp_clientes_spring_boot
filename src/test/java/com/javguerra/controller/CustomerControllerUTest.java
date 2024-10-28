@@ -37,7 +37,7 @@ class CustomerControllerUTest {
 
         String view = customerController.findAll(model);
 
-        assertEquals("/customer/list", view);
+        assertEquals("customer/list", view);
         verify(customerService).getAllCustomers();
         verify(model).addAttribute("customers", customers);
     }
@@ -51,7 +51,7 @@ class CustomerControllerUTest {
 
         String view = customerController.findById(model, 1L);
 
-        assertEquals("/customer/detail", view);
+        assertEquals("customer/detail", view);
         verify(customerService).findACustomerById(1L);
         verify(model).addAttribute("customer", customer1);
     }
@@ -70,7 +70,7 @@ class CustomerControllerUTest {
 
         String view = customerController.findById(model, 1L);
 
-        assertEquals("/error", view);
+        assertEquals("error", view);
         verify(customerService).findACustomerById(1L);
     }
 
@@ -79,7 +79,7 @@ class CustomerControllerUTest {
     void getFormToCreate() {
         String view = customerController.getFormToCreate(model);
 
-        assertEquals("/customer/form", view);
+        assertEquals("customer/form", view);
         verify(model).addAttribute(eq("customer"), any(Customer.class));
     }
 
@@ -92,7 +92,7 @@ class CustomerControllerUTest {
 
         String view = customerController.getFormToUpdate(model, 1L);
 
-        assertEquals("/customer/form", view);
+        assertEquals("customer/form", view);
         verify(customerService).findACustomerById(1L);
         verify(model).addAttribute("customer", customer1);
     }
@@ -104,7 +104,7 @@ class CustomerControllerUTest {
 
         String view = customerController.getFormToUpdate(model, 1L);
 
-        assertEquals("/error", view);
+        assertEquals("error", view);
         verify(customerService).findACustomerById(1L);
     }
 
@@ -146,7 +146,7 @@ class CustomerControllerUTest {
 
         String view = customerController.save(model, customer1);
 
-        assertEquals("/error", view);
+        assertEquals("error", view);
     }
 
     @Test
@@ -167,7 +167,7 @@ class CustomerControllerUTest {
         when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
 
         String view = customerController.deleteById(model, 1L);
-        assertEquals("/error", view);
+        assertEquals("error", view);
     }
 
     @Test
@@ -183,7 +183,7 @@ class CustomerControllerUTest {
     void deleteAll_NotDeleted() {
         when(customerService.countCustomers()).thenReturn(1L);
         String view = customerController.deleteAll(model);
-        assertEquals("/error", view);
+        assertEquals("error", view);
         verify(customerService).removeAllCustomers();
     }
 

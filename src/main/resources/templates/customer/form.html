@@ -12,7 +12,7 @@
 </header>
 
 <main>
-    <p th:if="${customer == null}">No se encuentra el cliente.</p>
+    <p th:if="${customer == null}">No se encuentra el cliente</p>
     <form th:if="${customer}"  id="customerForm" th:action="@{/customers}" th:object="${customer}" method="post">
         <fieldset>
             <legend>Datos del cliente</legend>

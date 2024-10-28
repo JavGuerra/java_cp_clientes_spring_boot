@@ -20,7 +20,7 @@
 </nav>
 
 <main>
-    <p th:if="${customers == null || customers.size() == 0}">No hay clientes.</p>
+    <p th:if="${customers == null || customers.size() == 0}">No hay clientes</p>
     <table th:unless="${customers == null || customers.size() == 0}" id="customersList">
         <thead>
         <tr>

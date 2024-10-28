@@ -34,7 +34,7 @@ public class CustomerController {
     @GetMapping("customers")
     public String findAll(Model model) {
         model.addAttribute("customers", customerService.getAllCustomers());
-        return "/customer/list";
+        return "customer/list";
     }
 
     /**
@@ -48,15 +48,15 @@ public class CustomerController {
     public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0) {
             model.addAttribute("message", idMsg);
-            return "/error";
+            return "error";
         }
 
         return customerService.findACustomerById(id).map(customer -> {
             model.addAttribute("customer", customer);
-            return "/customer/detail";
+            return "customer/detail";
         }).orElseGet(() -> {
             model.addAttribute("message", clientIdMsg);
-            return "/error";
+            return "error";
         });
 
 // Deprecado
@@ -78,7 +78,7 @@ public class CustomerController {
     @GetMapping("customers/new")
     public String getFormToCreate(Model model) {
         model.addAttribute("customer", new Customer());
-        return "/customer/form";
+        return "customer/form";
     }
 
     /**
@@ -92,14 +92,14 @@ public class CustomerController {
     public String getFormToUpdate(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0) {
             model.addAttribute("message", idMsg);
-            return "/error";
+            return "error";
         }
         return customerService.findACustomerById(id).map(customer -> {
             model.addAttribute("customer", customer);
-            return "/customer/form";
+            return "customer/form";
         }).orElseGet(() -> {
             model.addAttribute("message", clientIdMsg);
-            return "/error";
+            return "error";
         });
     }
 
@@ -114,12 +114,12 @@ public class CustomerController {
     public String save(Model model, @ModelAttribute Customer customer) {
         if (customer == null) {
             model.addAttribute("message", dataMsg);
-            return "/error";
+            return "error";
         }
         String message = formValidation(customer);
         if (message != null) {
             model.addAttribute("message", message);
-            return "/error";
+            return "error";
         }
 
 //        if (customer.getId() == null) { // crear
@@ -144,7 +144,7 @@ public class CustomerController {
                 return "redirect:/customers/" + customer.getId();
             }).orElseGet(() -> {
                 model.addAttribute("message", clientIdMsg);
-                return "/error";
+                return "error";
             });
         }
 
@@ -163,14 +163,14 @@ public class CustomerController {
     public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0) {
             model.addAttribute("message", idMsg);
-            return "/error";
+            return "error";
         }
         return customerService.findACustomerById(id).map(customer -> {
             customerService.removeACustomerById(customer.getId());
             return "redirect:/customers";
         }).orElseGet(() -> {
             model.addAttribute("message", clientIdMsg);
-            return "/error";
+            return "error";
         });
     }
 
@@ -185,7 +185,7 @@ public class CustomerController {
         customerService.removeAllCustomers();
         if (customerService.countCustomers() != 0) {
             model.addAttribute("message", errMsg);
-            return "/error";
+            return "error";
         }
         return "redirect:/customers";
     }
