@@ -33,12 +33,12 @@ class CustomerControllerUTest {
         Customer man1 = Customer.builder().id(1L).build();
         Customer man2 = Customer.builder().id(2L).build();
         List<Customer> customers = List.of(man1, man2);
-        when(customerService.getAllCustomers()).thenReturn(customers);
+        when(customerService.getAll()).thenReturn(customers);
 
         String view = customerController.findAll(model);
 
         assertEquals("customer/list", view);
-        verify(customerService).getAllCustomers();
+        verify(customerService).getAll();
         verify(model).addAttribute("customers", customers);
     }
 
@@ -47,19 +47,19 @@ class CustomerControllerUTest {
     void findById_WhenCustomerExists() {
         Customer customer1 = Customer.builder().id(1L).nombre("c1").build();
         Optional<Customer> customerOpt = Optional.of(customer1);
-        when(customerService.findACustomerById(1L)).thenReturn(customerOpt);
+        when(customerService.findById(1L)).thenReturn(customerOpt);
 
         String view = customerController.findById(model, 1L);
 
         assertEquals("customer/detail", view);
-        verify(customerService).findACustomerById(1L);
+        verify(customerService).findById(1L);
         verify(model).addAttribute("customer", customer1);
     }
 
     @Test
     @DisplayName("findById que no tiene cliente con id")
     void findById_WhenCustomerNotExists() {
-        when(customerService.findACustomerById(1L))
+        when(customerService.findById(1L))
                 .thenReturn(Optional.empty());
 
 /*
@@ -71,7 +71,7 @@ class CustomerControllerUTest {
         String view = customerController.findById(model, 1L);
 
         assertEquals("error", view);
-        verify(customerService).findACustomerById(1L);
+        verify(customerService).findById(1L);
     }
 
     @Test
@@ -88,24 +88,24 @@ class CustomerControllerUTest {
     void getFormToUpdate_Exists() {
         Customer customer1 = Customer.builder().id(1L).nombre("c1").build();
         Optional<Customer> customerOpt = Optional.of(customer1);
-        when(customerService.findACustomerById(1L)).thenReturn(customerOpt);
+        when(customerService.findById(1L)).thenReturn(customerOpt);
 
         String view = customerController.getFormToUpdate(model, 1L);
 
         assertEquals("customer/form", view);
-        verify(customerService).findACustomerById(1L);
+        verify(customerService).findById(1L);
         verify(model).addAttribute("customer", customer1);
     }
 
     @Test
     @DisplayName("Método que te desplaza a la página de error si no se encuentra el cliente")
     void getFormToUpdate_NotExists() {
-        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+        when(customerService.findById(1L)).thenReturn(Optional.empty());
 
         String view = customerController.getFormToUpdate(model, 1L);
 
         assertEquals("error", view);
-        verify(customerService).findACustomerById(1L);
+        verify(customerService).findById(1L);
     }
 
     @Test
@@ -119,7 +119,7 @@ class CustomerControllerUTest {
             Customer customerToSave = invocation.getArgument(0);
             customerToSave.setId(1L);
             return null;
-        }).when(customerService).saveACustomer(customer1);
+        }).when(customerService).save(customer1);
 
         String view = customerController.save(model, customer1);
         assertEquals("redirect:/customers/1", view);
@@ -142,7 +142,7 @@ class CustomerControllerUTest {
     void save_NotExist() {
         Customer customer1 = Customer.builder().id(1L).
                 nombre("c1").apellido("a1").email("e1").edad(1).build();
-        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+        when(customerService.findById(1L)).thenReturn(Optional.empty());
 
         String view = customerController.save(model, customer1);
 
@@ -153,18 +153,18 @@ class CustomerControllerUTest {
     @DisplayName("Método que borra un cliente del repositorio")
     void deleteById_Exists() {
         Customer customer1 = Customer.builder().id(1L).build();
-        when(customerService.findACustomerById(1L)).
+        when(customerService.findById(1L)).
                 thenReturn(Optional.of(customer1));
 
         String view = customerController.deleteById(model, 1L);
         assertEquals("redirect:/customers", view);
-        verify(customerService).removeACustomerById(1L);
+        verify(customerService).deleteById(1L);
     }
 
     @Test
     @DisplayName("Método que te desplaza a la página de error si no se borra el cliente")
     void deleteById_NotExists() {
-        when(customerService.findACustomerById(1L)).thenReturn(Optional.empty());
+        when(customerService.findById(1L)).thenReturn(Optional.empty());
 
         String view = customerController.deleteById(model, 1L);
         assertEquals("error", view);
@@ -175,16 +175,16 @@ class CustomerControllerUTest {
     void deleteAll() {
         String view = customerController.deleteAll(model);
         assertEquals("redirect:/customers", view);
-        verify(customerService).removeAllCustomers();
+        verify(customerService).deleteAll();
     }
 
     @Test
     @DisplayName("Método que te desplaza a la página de error si no se borran los clientes")
     void deleteAll_NotDeleted() {
-        when(customerService.countCustomers()).thenReturn(1L);
+        when(customerService.count()).thenReturn(1L);
         String view = customerController.deleteAll(model);
         assertEquals("error", view);
-        verify(customerService).removeAllCustomers();
+        verify(customerService).deleteAll();
     }
 
 }

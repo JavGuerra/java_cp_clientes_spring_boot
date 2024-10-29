@@ -33,7 +33,7 @@ public class CustomerController {
      */
     @GetMapping("customers")
     public String findAll(Model model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
+        model.addAttribute("customers", customerService.getAll());
         return "customer/list";
     }
 
@@ -51,7 +51,7 @@ public class CustomerController {
             return "error";
         }
 
-        return customerService.findACustomerById(id).map(customer -> {
+        return customerService.findById(id).map(customer -> {
             model.addAttribute("customer", customer);
             return "customer/detail";
         }).orElseGet(() -> {
@@ -94,7 +94,7 @@ public class CustomerController {
             model.addAttribute("message", idMsg);
             return "error";
         }
-        return customerService.findACustomerById(id).map(customer -> {
+        return customerService.findById(id).map(customer -> {
             model.addAttribute("customer", customer);
             return "customer/form";
         }).orElseGet(() -> {
@@ -135,13 +135,13 @@ public class CustomerController {
 //        }
 
         if (customer.getId() == null) { // crear
-            customerService.saveACustomer(customer);
+            customerService.save(customer);
             return "redirect:/customers/" + customer.getId();
         } else { // editar
-            return customerService.findACustomerById(customer.getId()).map(optCustomer -> {
+            return customerService.findById(customer.getId()).map(optCustomer -> {
                 BeanUtils.copyProperties(customer, optCustomer);
-                customerService.saveACustomer(optCustomer);
-                return "redirect:/customers/" + customer.getId();
+                customerService.save(optCustomer);
+                return "redirect:/customers/" + optCustomer.getId();
             }).orElseGet(() -> {
                 model.addAttribute("message", clientIdMsg);
                 return "error";
@@ -165,8 +165,8 @@ public class CustomerController {
             model.addAttribute("message", idMsg);
             return "error";
         }
-        return customerService.findACustomerById(id).map(customer -> {
-            customerService.removeACustomerById(customer.getId());
+        return customerService.findById(id).map(customer -> {
+            customerService.deleteById(customer.getId());
             return "redirect:/customers";
         }).orElseGet(() -> {
             model.addAttribute("message", clientIdMsg);
@@ -182,8 +182,8 @@ public class CustomerController {
      */
     @GetMapping("customers/delete")
     public String deleteAll(Model model) {
-        customerService.removeAllCustomers();
-        if (customerService.countCustomers() != 0) {
+        customerService.deleteAll();
+        if (customerService.count() != 0) {
             model.addAttribute("message", errMsg);
             return "error";
         }

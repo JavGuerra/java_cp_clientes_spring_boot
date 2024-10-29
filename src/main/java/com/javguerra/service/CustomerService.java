@@ -12,14 +12,14 @@ public interface CustomerService {
      *
      * @return List<Customer>
      */
-    List<Customer> getAllCustomers();
+    List<Customer> getAll();
 
     /**
      * Devuelve el número de clientes totales
      *
      * @return long
      */
-    long countCustomers();
+    long count();
 
     /**
      * Devuelve un cliente por su id dada
@@ -27,7 +27,7 @@ public interface CustomerService {
      * @param id long
      * @return Optional<Customer>
      */
-    Optional<Customer> findACustomerById(long id);
+    Optional<Customer> findById(long id);
 
     /**
      * Agrega un cliente
@@ -35,7 +35,14 @@ public interface CustomerService {
      * @param customer Customer
      * @return Customer
      */
-    Customer saveACustomer(Customer customer);
+    Customer save(Customer customer);
+
+    /**
+     * Agrega una lista de clientes
+     *
+     * @param customers List<Customer>
+     */
+    void saveAll(List<Customer> customers);
 
     /**
      * Elimina un cliente por su id dada
@@ -43,11 +50,10 @@ public interface CustomerService {
      *
      * @param id long
      */
-    void removeACustomerById(long id);
+    void deleteById(long id);
 
     /**
      * Elimina todos los clientes
      */
-    void removeAllCustomers();
-
+    void deleteAll();
 }

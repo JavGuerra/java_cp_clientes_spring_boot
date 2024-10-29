@@ -7,53 +7,61 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
-class CustomerControllerITest {
+class CustomerControllerPITest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+
+    @MockBean
     private CustomerService customerService;
 
     @Test
     void findAll() throws Exception {
-
-        customerService.saveAll(List.of(
+        when(customerService.getAll()).thenReturn(List.of(
                 Customer.builder().id(1L).nombre("c1").build(),
                 Customer.builder().id(2L).nombre("c2").build()
         ));
-        System.out.println("findAll products: " + customerService.count());
+
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("customer/list"))
                 .andExpect(model().attributeExists("customers"))
-                .andExpect(model().attribute("customers", hasSize(2)));
+                .andExpect(model().attribute("customers", hasSize(2)))
+                .andExpect(model().attribute("customers", hasItem(
+                        allOf(
+                                hasProperty("id", is(1L)),
+                                hasProperty("nombre", is("c1"))
+                        )
+                )));
     }
 
     @Test
     void findById() throws Exception {
-        Customer customer = customerService.save(
-                Customer.builder().nombre("c1").build()
-        );
+        var customer = Customer.builder().id(1L).nombre("c1").build();
+        when(customerService.findById(1L))
+                .thenReturn(Optional.of(customer));
 
-        System.out.println("findById products: " + customerService.count());
-        System.out.println("findById producto guardado: " + customer.getId());
-
-        mockMvc.perform(get("/customers/" + customer.getId()))
+        mockMvc.perform(get("/customers/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("customer/detail"))
-                .andExpect(model().attributeExists("customer"));
+                .andExpect(model().attributeExists("customer"))
+                .andExpect(model().attribute("customer", allOf(
+                        hasProperty("id", is(1L)),
+                        hasProperty("nombre", is("c1"))
+                )));
     }
 
     @Test
