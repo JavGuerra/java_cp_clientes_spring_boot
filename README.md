@@ -4,9 +4,9 @@
 
 **Autor**: Javier Guerra  
 **Estátus**: Finalizado  
-**Versión**: 1.0.0  
+**Versión**: 1.1.0  
 **Fecha**: 2024-10-18  
-**Última**: 2024-10-18
+**Última**: 2024-10-31
 
 ## Descripción
 

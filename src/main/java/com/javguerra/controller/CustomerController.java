@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.NoSuchElementException;
+
 import static com.javguerra.util.Validation.*;
 
 @Controller
@@ -46,20 +48,20 @@ public class CustomerController {
      */
     @GetMapping("customers/{id}")
     public String findById(Model model, @PathVariable Long id) {
-        if (invalidIntPosNumber(id) || id == 0) {
-            model.addAttribute("message", idMsg);
-            return "error";
-        }
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new NoSuchElementException(idMsg);
 
         return customerService.findById(id).map(customer -> {
             model.addAttribute("customer", customer);
             return "customer/detail";
-        }).orElseGet(() -> {
-            model.addAttribute("message", clientIdMsg);
-            return "error";
-        });
+// Deprecated
+//        }).orElseGet(() -> {
+//            model.addAttribute("message", clientIdMsg);
+//            return "error";
+//        });
+        }).orElseThrow(() -> new NoSuchElementException(clientIdMsg));
 
-// Deprecado
+// Deprecated
 //        if (invalidIntPosNumber(id) || id == 0) {
 //        customerService.findACustomerById(id).ifPresentOrElse(
 //                customer -> model.addAttribute("customer", customer),
@@ -90,17 +92,13 @@ public class CustomerController {
      */
     @GetMapping("customers/update/{id}")
     public String getFormToUpdate(Model model, @PathVariable Long id) {
-        if (invalidIntPosNumber(id) || id == 0) {
-            model.addAttribute("message", idMsg);
-            return "error";
-        }
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new NoSuchElementException(idMsg);
+
         return customerService.findById(id).map(customer -> {
             model.addAttribute("customer", customer);
             return "customer/form";
-        }).orElseGet(() -> {
-            model.addAttribute("message", clientIdMsg);
-            return "error";
-        });
+        }).orElseThrow(() -> new NoSuchElementException(clientIdMsg));
     }
 
     /**
@@ -112,16 +110,11 @@ public class CustomerController {
      */
     @PostMapping("customers")
     public String save(Model model, @ModelAttribute Customer customer) {
-        if (customer == null) {
-            model.addAttribute("message", dataMsg);
-            return "error";
-        }
-        String message = formValidation(customer);
-        if (message != null) {
-            model.addAttribute("message", message);
-            return "error";
-        }
+        if (customer == null) throw new NoSuchElementException(dataMsg);
+        String error = formValidation(customer);
+        if (error != null) throw new NoSuchElementException(error);
 
+// Deprecated
 //        if (customer.getId() == null) { // crear
 //            customerService.saveACustomer(customer);
 //        } else { // editar
@@ -142,14 +135,8 @@ public class CustomerController {
                 BeanUtils.copyProperties(customer, optCustomer);
                 customerService.save(optCustomer);
                 return "redirect:/customers/" + optCustomer.getId();
-            }).orElseGet(() -> {
-                model.addAttribute("message", clientIdMsg);
-                return "error";
-            });
+            }).orElseThrow(() -> new NoSuchElementException(clientIdMsg));
         }
-
-
-
     }
 
     /**
@@ -161,17 +148,12 @@ public class CustomerController {
      */
     @GetMapping("customers/delete/{id}")
     public String deleteById(Model model, @PathVariable Long id) {
-        if (invalidIntPosNumber(id) || id == 0) {
-            model.addAttribute("message", idMsg);
-            return "error";
-        }
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new NoSuchElementException(idMsg);
         return customerService.findById(id).map(customer -> {
             customerService.deleteById(customer.getId());
             return "redirect:/customers";
-        }).orElseGet(() -> {
-            model.addAttribute("message", clientIdMsg);
-            return "error";
-        });
+        }).orElseThrow(() -> new NoSuchElementException(clientIdMsg));
     }
 
     /**
@@ -183,10 +165,8 @@ public class CustomerController {
     @GetMapping("customers/delete")
     public String deleteAll(Model model) {
         customerService.deleteAll();
-        if (customerService.count() != 0) {
-            model.addAttribute("message", errMsg);
-            return "error";
-        }
+        if (customerService.count() != 0)
+            throw new NoSuchElementException(errMsg);
         return "redirect:/customers";
     }
 

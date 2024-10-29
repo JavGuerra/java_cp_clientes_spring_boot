@@ -13,7 +13,7 @@ import java.util.List;
  * Aplicación CRUD Customer con Spring Boot
  *
  * @author Javier Guerra
- * @version 1.0.0
+ * @version 1.1.0
  * @since 2024-10-21
  */
 @SpringBootApplication
